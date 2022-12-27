@@ -23,7 +23,7 @@ export default function scanner (chainId: ChainId): BalanceScanner {
   })
 
   return async (address: string, contracts: string[]) => {
-    let result = {}
+    let result: { [contract: string]: string } = {}
     const chunkSize = 100
     for (let i = 0; i < contracts.length; i += chunkSize) {
       const contractsChunk = contracts.slice(i, i + chunkSize)
@@ -42,6 +42,11 @@ export default function scanner (chainId: ChainId): BalanceScanner {
           [curr.contractAddress]: ethers.BigNumber.from(curr.tokenBalance).toString()
         }
       }, result)
+    }
+
+    const nativeBalance = await alchemy.core.getBalance(address)
+    if (!nativeBalance.isZero()) {
+      result[''] = nativeBalance.toString()
     }
 
     return result

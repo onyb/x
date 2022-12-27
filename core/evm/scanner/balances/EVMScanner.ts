@@ -1,4 +1,6 @@
+import { ethers } from 'ethers'
 import { getTokensBalance } from '@mycrypto/eth-scan'
+
 import { ChainId, BalanceScanner } from '~/core/evm/types'
 
 type Config = {
@@ -30,9 +32,10 @@ const config: Config = {
 
 export default function scanner (chainId: ChainId): BalanceScanner {
   const providerConfig = config[chainId]
+  const provider = new ethers.providers.JsonRpcProvider(providerConfig.rpc)
 
   return async (address: string, contracts: string[]) => {
-    const result = await getTokensBalance(providerConfig.rpc, address, contracts, {
+    const result = await getTokensBalance(provider, address, contracts, {
       batchSize: 100,
       contractAddress: providerConfig.scannerContract
     })
@@ -41,6 +44,13 @@ export default function scanner (chainId: ChainId): BalanceScanner {
       .filter(([_, balance]) => balance > 0)
       .map(([contract, balance]) => [contract, balance.toString()])
 
-    return Object.fromEntries(filteredResults)
+    let balances = Object.fromEntries(filteredResults)
+
+    const nativeBalance = await provider.getBalance(address)
+    if (!nativeBalance.isZero()) {
+      balances[''] = nativeBalance.toString()
+    }
+
+    return balances
   }
 }
