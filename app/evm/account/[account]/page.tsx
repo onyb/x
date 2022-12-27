@@ -99,3 +99,7 @@ export default async function Page (context: Props) {
     </>
   )
 }
+
+export const config = {
+  runtime: 'edge'
+}
