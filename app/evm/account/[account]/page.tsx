@@ -15,11 +15,11 @@ const chainIdToNetworkNameMap = {
   [ChainId.ARBITRUM]: 'Arbitrum'
 }
 
-async function Balance (props: { chainId: ChainId; account: string; slow: boolean }) {
-  const { chainId, account, slow } = props
+async function Balance (props: { chainId: ChainId; account: string }) {
+  const { chainId, account } = props
 
-  if (slow) {
-    await new Promise(r => setTimeout(r, Math.floor(Math.random() * 1000)))
+  if (chainId === ChainId.POLYGON) {
+    await new Promise(r => setTimeout(r, 2000))
   }
   const balances = await Scanner(chainId, account)
 
@@ -55,46 +55,41 @@ type Props = {
   params: {
     account: string
   }
-  searchParams: {
-    slow?: string
-  }
 }
 
 export default async function Page (context: Props) {
   const { account } = context.params
-  const { slow: slowStr } = context.searchParams
-  const slow = slowStr !== 'false' && !!slowStr
 
   return (
     <>
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.ETHEREUM} account={account} slow={slow} />
+        <Balance chainId={ChainId.ETHEREUM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.POLYGON} account={account} slow={slow} />
+        <Balance chainId={ChainId.POLYGON} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.BSC} account={account} slow={slow} />
+        <Balance chainId={ChainId.BSC} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.OPTIMISM} account={account} slow={slow} />
+        <Balance chainId={ChainId.OPTIMISM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.ARBITRUM} account={account} slow={slow} />
+        <Balance chainId={ChainId.ARBITRUM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
         {/* @ts-expect-error Async server component */}
-        <Balance chainId={ChainId.AVALANCHE} account={account} slow={slow} />
+        <Balance chainId={ChainId.AVALANCHE} account={account} />
       </Suspense>
     </>
   )
