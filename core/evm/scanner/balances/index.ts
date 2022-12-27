@@ -1,7 +1,8 @@
+import { ethers } from 'ethers'
+import { TokenInfo } from '@uniswap/token-lists'
+
 import config from './config'
 import { ChainId } from '~/core/evm/types'
-import { TokenInfo } from '@uniswap/token-lists'
-import { ethers } from 'ethers'
 
 function makeDummyNativeTokenInfo (chainId: ChainId): TokenInfo {
   return {

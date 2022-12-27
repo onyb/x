@@ -58,26 +58,32 @@ export default async function Page ({ params }: Props) {
   return (
     <>
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.ETHEREUM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.POLYGON} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.BSC} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.OPTIMISM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.ARBITRUM} account={account} />
       </Suspense>
 
       <Suspense fallback={<Loader />}>
+        {/* @ts-expect-error Async server component */}
         <Balance chainId={ChainId.AVALANCHE} account={account} />
       </Suspense>
     </>

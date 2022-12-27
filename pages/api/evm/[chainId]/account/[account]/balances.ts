@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { TokenInfo } from '@uniswap/token-lists'
 
 import Scanner from '~/core/evm/scanner/balances'
 import { ChainId } from '~/core/evm/types'
@@ -11,8 +12,9 @@ interface TypedNextApiRequest extends NextApiRequest {
 }
 
 type BalancesResult = {
-  [contract: string]: string
-}
+  token: TokenInfo
+  balance: string
+}[]
 
 export default async function handler (
   req: TypedNextApiRequest,
