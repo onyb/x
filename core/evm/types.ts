@@ -10,4 +10,10 @@ export enum ChainId {
 export type BalanceScanner = (
   address: string,
   contracts: string[]
-) => Promise<{ [contract: string]: string }>
+) => AsyncGenerator<
+  {
+    contractAddress: string
+    balance: string
+  },
+  void
+>

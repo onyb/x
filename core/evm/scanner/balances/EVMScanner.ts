@@ -34,23 +34,24 @@ export default function scanner (chainId: ChainId): BalanceScanner {
   const providerConfig = config[chainId]
   const provider = new ethers.providers.JsonRpcProvider(providerConfig.rpc)
 
-  return async (address: string, contracts: string[]) => {
-    const result = await getTokensBalance(provider, address, contracts, {
-      batchSize: 100,
-      contractAddress: providerConfig.scannerContract
-    })
-
-    const filteredResults = Object.entries(result)
-      .filter(([_, balance]) => balance > 0)
-      .map(([contract, balance]) => [contract, balance.toString()])
-
-    let balances = Object.fromEntries(filteredResults)
-
+  return async function * (address: string, contracts: string[]) {
     const nativeBalance = await provider.getBalance(address)
     if (!nativeBalance.isZero()) {
-      balances[''] = nativeBalance.toString()
+      yield {
+        contractAddress: '',
+        balance: nativeBalance.toString()
+      }
     }
 
-    return balances
+    const result = await getTokensBalance(provider, address, contracts, {
+      contractAddress: providerConfig.scannerContract
+    })
+    const balances = Object.entries(result).filter(([_, balance]) => balance > 0)
+    for (const [contract, balance] of balances) {
+      yield {
+        contractAddress: contract,
+        balance: balance.toString()
+      }
+    }
   }
 }

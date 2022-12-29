@@ -22,33 +22,34 @@ export default function scanner (chainId: ChainId): BalanceScanner {
     network: chainIdNetworkMap[chainId]
   })
 
-  return async (address: string, contracts: string[]) => {
-    let result: { [contract: string]: string } = {}
+  return async function * (address: string, contracts: string[]) {
+    const nativeBalance = await alchemy.core.getBalance(address)
+    if (!nativeBalance.isZero()) {
+      yield {
+        contractAddress: '',
+        balance: nativeBalance.toString()
+      }
+    }
+
     const chunkSize = 100
     for (let i = 0; i < contracts.length; i += chunkSize) {
       const contractsChunk = contracts.slice(i, i + chunkSize)
 
       const { tokenBalances } = await alchemy.core.getTokenBalances(address, contractsChunk)
-      const filteredTokenBalances = tokenBalances
+      const result = tokenBalances
         .filter(each => !each.error)
 
         // In case of Arbitrum One, zero balances are presumably encoded as '0x'.
         .filter(each => each.tokenBalance !== '0x')
         .filter(each => each.tokenBalance && !ethers.BigNumber.from(each.tokenBalance).isZero())
+        .map(each => ({
+          contractAddress: each.contractAddress,
+          balance: ethers.BigNumber.from(each.tokenBalance).toString()
+        }))
 
-      result = filteredTokenBalances.reduce((acc, curr) => {
-        return {
-          ...acc,
-          [curr.contractAddress]: ethers.BigNumber.from(curr.tokenBalance).toString()
-        }
-      }, result)
+      for (const each of result) {
+        yield each
+      }
     }
-
-    const nativeBalance = await alchemy.core.getBalance(address)
-    if (!nativeBalance.isZero()) {
-      result[''] = nativeBalance.toString()
-    }
-
-    return result
   }
 }

@@ -25,26 +25,37 @@ const chainIdToSymbolMap = {
 
 export default async function scanner (chainId: ChainId, account: string) {
   const { scanner, tokens, ignoreContracts } = config[chainId]
-  const balancesMap = await scanner(
+  const stream = scanner(
     account,
     tokens.map(token => token.address).filter(address => !(ignoreContracts || []).includes(address))
   )
 
-  const tokenBalances = tokens
-    .filter(token => balancesMap[token.address])
-    .map(token => ({
-      token,
-      balance: ethers.utils.formatUnits(balancesMap[token.address], token.decimals)
-    }))
+  // TODO: move this to config, in order to avoid generation of this map on every scan.
+  const contractTokenInfoMap: Record<string, TokenInfo> = tokens.reduce(
+    (a, v) => ({ ...a, [v.address]: v }),
+    {}
+  )
 
-  const nativeBalances = balancesMap['']
-    ? [
-      {
-        token: makeDummyNativeTokenInfo(chainId),
-        balance: ethers.utils.formatEther(balancesMap[''])
+  // Consume the stream
+  // TODO: is it possible to render this stream asynchronously?
+  const balances = []
+  for await (const item of stream) {
+    balances.push(item)
+  }
+
+  return balances.map(({ balance, contractAddress }) => {
+    if (contractAddress) {
+      const token = contractTokenInfoMap[contractAddress]
+
+      return {
+        balance: ethers.utils.formatUnits(balance, token.decimals),
+        token
       }
-    ]
-    : []
+    }
 
-  return nativeBalances.concat(...tokenBalances)
+    return {
+      token: makeDummyNativeTokenInfo(chainId),
+      balance: ethers.utils.formatEther(balance)
+    }
+  })
 }
