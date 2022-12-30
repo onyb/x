@@ -23,10 +23,10 @@ const chainIdToSymbolMap = {
   [ChainId.ARBITRUM]: 'ETH'
 }
 
-export default async function scanner (chainId: ChainId, account: string) {
+export default async function scanner (chainId: ChainId, address: string) {
   const { scanner, tokens, ignoreContracts } = config[chainId]
   const stream = scanner(
-    account,
+    address,
     tokens.map(token => token.address).filter(address => !(ignoreContracts || []).includes(address))
   )
 

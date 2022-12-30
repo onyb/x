@@ -3,6 +3,7 @@ import { TokenInfo } from '@uniswap/token-lists'
 
 import Scanner from '~/core/evm/scanner/balances'
 import { ChainId } from '~/core/evm/types'
+import { getOrResolveAddress } from '~/core/evm/address'
 
 interface TypedNextApiRequest extends NextApiRequest {
   query: {
@@ -11,14 +12,18 @@ interface TypedNextApiRequest extends NextApiRequest {
   }
 }
 
-type BalancesResult = {
+type SuccessResponse = {
   token: TokenInfo
   balance: string
 }[]
 
+type FailureResponse = {
+  error: string
+}
+
 export default async function handler (
   req: TypedNextApiRequest,
-  res: NextApiResponse<BalancesResult>
+  res: NextApiResponse<SuccessResponse | FailureResponse>
 ) {
   const { chainId, account } = req.query
 
@@ -27,7 +32,11 @@ export default async function handler (
     return
   }
 
-  const balances = await Scanner(chainId, account)
-
-  res.status(200).json(balances)
+  try {
+    const address = await getOrResolveAddress(account)
+    const balances = await Scanner(chainId, address)
+    res.status(200).json(balances)
+  } catch (e) {
+    res.status(400).json({ error: e.message })
+  }
 }

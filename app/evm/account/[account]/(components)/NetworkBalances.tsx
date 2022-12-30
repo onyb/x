@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import Scanner from '~/core/evm/scanner/balances'
 import { ChainId } from '~/core/evm/types'
 
@@ -12,10 +10,15 @@ const chainIdToNetworkNameMap = {
   [ChainId.ARBITRUM]: 'Arbitrum'
 }
 
-export default async function NetworkBalances (props: { chainId: ChainId; account: string }) {
-  const { chainId, account } = props
+type Props = {
+  chainId: ChainId
+  address: string
+}
 
-  const balances = await Scanner(chainId, account)
+export default async function NetworkBalances (props: Props) {
+  const { chainId, address } = props
+
+  const balances = await Scanner(chainId, address)
   if (balances.length === 0) {
     return null
   }
