@@ -36,7 +36,11 @@ export default async function handler (
     const address = await getOrResolveAddress(account)
     const balances = await Scanner(chainId, address)
     res.status(200).json(balances)
-  } catch (e) {
-    res.status(400).json({ error: e.message })
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      res.status(400).json({ error: e.message })
+    } else {
+      res.status(400).json({ error: 'Unknown error' })
+    }
   }
 }

@@ -59,7 +59,11 @@ export default async function Page (context: Props) {
         </Suspense>
       </>
     )
-  } catch (e) {
-    return <>{e.message}</>
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      return <>{e.message}</>
+    } else {
+      return <>Unknown error</>
+    }
   }
 }
