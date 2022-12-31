@@ -14,10 +14,10 @@ const config: Config = {
     rpc: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_ETHEREUM_API_KEY}`
   },
   [ChainId.AVALANCHE]: {
-    rpc: 'https://api.avax.network/ext/bc/C/rpc'
+    rpc: 'https://rpc.ankr.com/avalanche'
   },
   [ChainId.BSC]: {
-    rpc: 'https://bsc-dataseed.binance.org',
+    rpc: 'https://rpc.ankr.com/bsc',
     scannerContract: '0x53242a975aa7c607e17138b0e0231162e3e68593'
   },
   [ChainId.OPTIMISM]: {
