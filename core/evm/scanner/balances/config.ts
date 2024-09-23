@@ -1,7 +1,6 @@
 import { TokenInfo } from '@uniswap/token-lists'
 
 import { BalanceScanner, ChainId } from '~/core/evm/types'
-import AlchemyScanner from '~/core/evm/scanner/balances/AlchemyScanner'
 import EVMScanner from '~/core/evm/scanner/balances/EVMScanner'
 
 import UniswapLabsDefaultList from '~/data/tokenlists/uniswap-default.json'
@@ -17,15 +16,15 @@ type Config = {
 }
 const config: Config = {
   [ChainId.ETHEREUM]: {
-    scanner: AlchemyScanner(ChainId.ETHEREUM),
+    scanner: EVMScanner(ChainId.ETHEREUM),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.ETHEREUM
-    )
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.ETHEREUM
+    ),
   },
   [ChainId.POLYGON]: {
-    scanner: AlchemyScanner(ChainId.POLYGON),
+    scanner: EVMScanner(ChainId.POLYGON),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.POLYGON
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.POLYGON
     ),
     ignoreContracts: [
       // Genesis contract used for bridging to/from Polygon. It implements a
@@ -33,33 +32,33 @@ const config: Config = {
       // MATIC balance.
       //
       // We ignore this so it doesn't result in duplicate balance entries.
-      '0x0000000000000000000000000000000000001010'
-    ]
+      "0x0000000000000000000000000000000000001010",
+    ],
   },
   [ChainId.BSC]: {
     scanner: EVMScanner(ChainId.BSC),
     tokens: PancakeSwapExtendedList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.BSC
-    )
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.BSC
+    ),
   },
   [ChainId.AVALANCHE]: {
     scanner: EVMScanner(ChainId.AVALANCHE),
     tokens: AvalancheList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.AVALANCHE
-    )
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.AVALANCHE
+    ),
   },
   [ChainId.OPTIMISM]: {
-    scanner: AlchemyScanner(ChainId.OPTIMISM),
+    scanner: EVMScanner(ChainId.OPTIMISM),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.OPTIMISM
-    )
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.OPTIMISM
+    ),
   },
   [ChainId.ARBITRUM]: {
-    scanner: AlchemyScanner(ChainId.ARBITRUM),
+    scanner: EVMScanner(ChainId.ARBITRUM),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      token => `0x${token.chainId.toString(16)}` === ChainId.ARBITRUM
-    )
-  }
-}
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.ARBITRUM
+    ),
+  },
+};
 
 export default config
