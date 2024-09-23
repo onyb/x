@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@mycrypto/eth-scan": "^3.5.3",
-    "@next/font": "14.2.13",
     "@types/node": "22.5.5",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",
