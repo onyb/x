@@ -12,10 +12,16 @@ interface TypedNextApiRequest extends NextApiRequest {
   }
 }
 
-type SuccessResponse = {
+type Balances = {
   token: TokenInfo
   balance: string
-}[]
+}
+
+type SuccessResponse = {
+  account: string
+  resolvedAddress: string
+  balances: Balances[]
+}
 
 type FailureResponse = {
   error: string
@@ -35,7 +41,11 @@ export default async function handler (
   try {
     const address = await getOrResolveAddress(account)
     const balances = await Scanner(chainId, address)
-    res.status(200).json(balances)
+    res.status(200).json({
+      account,
+      resolvedAddress: address,
+      balances
+    })
   } catch (e: unknown) {
     if (e instanceof Error) {
       res.status(400).json({ error: e.message })
