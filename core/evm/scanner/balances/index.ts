@@ -48,14 +48,14 @@ export default async function scanner (chainId: ChainId, address: string) {
       const token = contractTokenInfoMap[contractAddress]
 
       return {
-        balance: ethers.utils.formatUnits(balance, token.decimals),
+        balance: ethers.formatUnits(balance, token.decimals),
         token
       }
     }
 
     return {
       token: makeDummyNativeTokenInfo(chainId),
-      balance: ethers.utils.formatEther(balance)
+      balance: ethers.formatEther(balance)
     }
   })
 }

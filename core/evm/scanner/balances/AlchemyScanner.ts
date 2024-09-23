@@ -40,11 +40,10 @@ export default function scanner (chainId: ChainId): BalanceScanner {
         .filter(each => !each.error)
 
         // In case of Arbitrum One, zero balances are presumably encoded as '0x'.
-        .filter(each => each.tokenBalance !== '0x')
-        .filter(each => each.tokenBalance && !ethers.BigNumber.from(each.tokenBalance).isZero())
+        .filter(each => each.tokenBalance !== '0x' && each.tokenBalance !== '0x0')
         .map(each => ({
           contractAddress: each.contractAddress,
-          balance: ethers.BigNumber.from(each.tokenBalance).toString()
+          balance: each.tokenBalance || '0'
         }))
 
       for (const each of result) {

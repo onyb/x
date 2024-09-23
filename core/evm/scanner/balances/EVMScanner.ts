@@ -32,11 +32,11 @@ const config: Config = {
 
 export default function scanner (chainId: ChainId): BalanceScanner {
   const providerConfig = config[chainId]
-  const provider = new ethers.providers.JsonRpcProvider(providerConfig.rpc)
+  const provider = new ethers.JsonRpcProvider(providerConfig.rpc)
 
   return async function * (address: string, contracts: string[]) {
     const nativeBalance = await provider.getBalance(address)
-    if (!nativeBalance.isZero()) {
+    if (nativeBalance > 0) {
       yield {
         contractAddress: '',
         balance: nativeBalance.toString()
