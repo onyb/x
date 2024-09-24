@@ -2,12 +2,12 @@ import Scanner from '~/core/evm/scanner/balances'
 import { ChainId } from '~/core/evm/types'
 
 const chainIdToNetworkNameMap = {
-  [ChainId.ETHEREUM]: 'Ethereum',
-  [ChainId.BSC]: 'Binance Smart Chain',
-  [ChainId.POLYGON]: 'Polygon',
-  [ChainId.AVALANCHE]: 'Avalanche',
-  [ChainId.OPTIMISM]: 'Optimism',
-  [ChainId.ARBITRUM]: 'Arbitrum'
+  [ChainId.Ethereum]: 'Ethereum',
+  [ChainId.BnbSmartChain]: 'Binance Smart Chain',
+  [ChainId.Polygon]: 'Polygon',
+  [ChainId.Base]: 'Base',
+  [ChainId.Optimism]: 'Optimism',
+  [ChainId.Arbitrum]: 'Arbitrum'
 }
 
 type Props = {

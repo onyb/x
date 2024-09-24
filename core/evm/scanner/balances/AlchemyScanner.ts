@@ -1,19 +1,18 @@
 import { Alchemy, Network } from 'alchemy-sdk'
-import { ethers } from 'ethers'
 
 import { BalanceScanner, ChainId } from '~/core/evm/types'
 
 const chainIdAlchemyAPIKeyMap: { [key in ChainId]?: string } = {
-  [ChainId.ETHEREUM]: process.env.ALCHEMY_ETHEREUM_API_KEY,
-  [ChainId.POLYGON]: process.env.ALCHEMY_POLYGON_API_KEY,
-  [ChainId.OPTIMISM]: process.env.ALCHEMY_OPTIMISM_API_KEY,
-  [ChainId.ARBITRUM]: process.env.ALCHEMY_ARBITRUM_API_KEY
+  [ChainId.Ethereum]: process.env.ALCHEMY_ETHEREUM_API_KEY,
+  [ChainId.Polygon]: process.env.ALCHEMY_POLYGON_API_KEY,
+  [ChainId.Optimism]: process.env.ALCHEMY_OPTIMISM_API_KEY,
+  [ChainId.Arbitrum]: process.env.ALCHEMY_ARBITRUM_API_KEY
 }
 const chainIdNetworkMap: { [key in ChainId]?: Network } = {
-  [ChainId.ETHEREUM]: Network.ETH_MAINNET,
-  [ChainId.POLYGON]: Network.MATIC_MAINNET,
-  [ChainId.OPTIMISM]: Network.OPT_MAINNET,
-  [ChainId.ARBITRUM]: Network.ARB_MAINNET
+  [ChainId.Ethereum]: Network.ETH_MAINNET,
+  [ChainId.Polygon]: Network.MATIC_MAINNET,
+  [ChainId.Optimism]: Network.OPT_MAINNET,
+  [ChainId.Arbitrum]: Network.ARB_MAINNET
 }
 
 export default function scanner (chainId: ChainId): BalanceScanner {

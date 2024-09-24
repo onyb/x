@@ -7,28 +7,31 @@ type Config = {
   [key in ChainId]: { rpc: string; scannerContract?: string }
 }
 const config: Config = {
-  [ChainId.POLYGON]: {
-    rpc: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_POLYGON_API_KEY}`
+  [ChainId.Polygon]: {
+    rpc: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    scannerContract: "0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5",
   },
-  [ChainId.ETHEREUM]: {
-    rpc: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_ETHEREUM_API_KEY}`
+  [ChainId.Ethereum]: {
+    rpc: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    scannerContract: "0x08A8fDBddc160A7d5b957256b903dCAb1aE512C5",
   },
-  [ChainId.AVALANCHE]: {
-    rpc: 'https://rpc.ankr.com/avalanche'
+  [ChainId.Base]: {
+    rpc: `https://base-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    scannerContract: "0x03548baf9123b7d9d3b9b74469be11028f2b86a4",
   },
-  [ChainId.BSC]: {
-    rpc: 'https://rpc.ankr.com/bsc',
-    scannerContract: '0x53242a975aa7c607e17138b0e0231162e3e68593'
+  [ChainId.BnbSmartChain]: {
+    rpc: "https://rpc.ankr.com/bsc",
+    scannerContract: "0x53242a975aa7c607e17138b0e0231162e3e68593",
   },
-  [ChainId.OPTIMISM]: {
-    rpc: `https://opt-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_OPTIMISM_API_KEY}`,
-    scannerContract: '0x9e5076DF494FC949aBc4461F4E57592B81517D81'
+  [ChainId.Optimism]: {
+    rpc: `https://opt-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    scannerContract: "0x9e5076DF494FC949aBc4461F4E57592B81517D81",
   },
-  [ChainId.ARBITRUM]: {
-    rpc: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_ARBITRUM_API_KEY}`,
-    scannerContract: '0xa3e7eb35e779f261ca604138d41d0258e995e97b'
-  }
-}
+  [ChainId.Arbitrum]: {
+    rpc: `https://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    scannerContract: "0xa3e7eb35e779f261ca604138d41d0258e995e97b",
+  },
+};
 
 export default function scanner (chainId: ChainId): BalanceScanner {
   const providerConfig = config[chainId]

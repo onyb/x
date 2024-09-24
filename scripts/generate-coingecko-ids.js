@@ -1,3 +1,4 @@
+// Keep this list synced with the ChainId enum in core/evm/types.ts
 const supportedChainIds = [
   "0x1",    // Ethereum
   "0x38",   // BNB Smart Chain

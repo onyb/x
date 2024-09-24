@@ -15,16 +15,16 @@ type Config = {
   }
 }
 const config: Config = {
-  [ChainId.ETHEREUM]: {
-    scanner: EVMScanner(ChainId.ETHEREUM),
+  [ChainId.Ethereum]: {
+    scanner: EVMScanner(ChainId.Ethereum),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.ETHEREUM
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.Ethereum
     ),
   },
-  [ChainId.POLYGON]: {
-    scanner: EVMScanner(ChainId.POLYGON),
+  [ChainId.Polygon]: {
+    scanner: EVMScanner(ChainId.Polygon),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.POLYGON
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.Polygon
     ),
     ignoreContracts: [
       // Genesis contract used for bridging to/from Polygon. It implements a
@@ -35,28 +35,28 @@ const config: Config = {
       "0x0000000000000000000000000000000000001010",
     ],
   },
-  [ChainId.BSC]: {
-    scanner: EVMScanner(ChainId.BSC),
+  [ChainId.BnbSmartChain]: {
+    scanner: EVMScanner(ChainId.BnbSmartChain),
     tokens: PancakeSwapExtendedList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.BSC
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.BnbSmartChain
     ),
   },
-  [ChainId.AVALANCHE]: {
-    scanner: EVMScanner(ChainId.AVALANCHE),
+  [ChainId.Base]: {
+    scanner: EVMScanner(ChainId.Base),
     tokens: AvalancheList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.AVALANCHE
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.Base
     ),
   },
-  [ChainId.OPTIMISM]: {
-    scanner: EVMScanner(ChainId.OPTIMISM),
+  [ChainId.Optimism]: {
+    scanner: EVMScanner(ChainId.Optimism),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.OPTIMISM
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.Optimism
     ),
   },
-  [ChainId.ARBITRUM]: {
-    scanner: EVMScanner(ChainId.ARBITRUM),
+  [ChainId.Arbitrum]: {
+    scanner: EVMScanner(ChainId.Arbitrum),
     tokens: UniswapLabsDefaultList.tokens.filter(
-      (token) => `0x${token.chainId.toString(16)}` === ChainId.ARBITRUM
+      (token) => `0x${token.chainId.toString(16)}` === ChainId.Arbitrum
     ),
   },
 };
