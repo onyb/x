@@ -21,6 +21,7 @@ type Balance = {
 type SuccessResponse = {
   account: string
   resolvedAddress: string
+  chainId: string
   balances: Balance[]
 }
 
@@ -44,6 +45,7 @@ export default async function handler (
     const balances = await Scanner(chainId, address)
     res.status(200).json({
       account,
+      chainId,
       resolvedAddress: address,
       balances: balances.map((each) => ({
         token: each.token,
