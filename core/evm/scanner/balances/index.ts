@@ -15,12 +15,12 @@ function makeDummyNativeTokenInfo (chainId: ChainId): TokenInfo {
 }
 
 const chainIdToSymbolMap = {
-  [ChainId.ETHEREUM]: 'ETH',
-  [ChainId.POLYGON]: 'MATIC',
-  [ChainId.BSC]: 'BNB',
-  [ChainId.AVALANCHE]: 'AVAX',
-  [ChainId.OPTIMISM]: 'ETH',
-  [ChainId.ARBITRUM]: 'ETH'
+  [ChainId.Ethereum]: 'ETH',
+  [ChainId.Polygon]: 'POL',
+  [ChainId.BnbSmartChain]: 'BNB',
+  [ChainId.Optimism]: 'ETH',
+  [ChainId.Arbitrum]: 'ETH',
+  [ChainId.Base]: 'ETH'
 }
 
 export default async function scanner (chainId: ChainId, address: string) {
