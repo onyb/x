@@ -12,15 +12,16 @@ interface TypedNextApiRequest extends NextApiRequest {
   }
 }
 
-type Balances = {
+type Balance = {
   token: TokenInfo
-  balance: string
+  amount: string
+  amountUSD: string
 }
 
 type SuccessResponse = {
   account: string
   resolvedAddress: string
-  balances: Balances[]
+  balances: Balance[]
 }
 
 type FailureResponse = {
@@ -44,8 +45,12 @@ export default async function handler (
     res.status(200).json({
       account,
       resolvedAddress: address,
-      balances
-    })
+      balances: balances.map((each) => ({
+        token: each.token,
+        amount: each.balance,
+        amountUSD: "0",
+      })),
+    });
   } catch (e: unknown) {
     if (e instanceof Error) {
       res.status(400).json({ error: e.message })
