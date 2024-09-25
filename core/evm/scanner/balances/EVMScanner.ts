@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { mapLimit } from "async";
 import { getTokensBalance } from '@mycrypto/eth-scan'
 
 import { rpcConfig } from '~/core/evm/config'
@@ -7,6 +8,8 @@ import { ChainId, BalanceScanner } from '~/core/evm/types'
 type ScannerConfig = {
   [key in ChainId]: { rpc: string; scannerContract?: string }
 }
+
+const maxBalanceScanBatchSize = 1000
 
 const config: ScannerConfig = {
   [ChainId.Polygon]: {
@@ -35,7 +38,7 @@ const config: ScannerConfig = {
   },
 };
 
-export default function scanner (chainId: ChainId): BalanceScanner {
+export default function scanner(chainId: ChainId): BalanceScanner {
   const providerConfig = config[chainId]
   const provider = new ethers.JsonRpcProvider(providerConfig.rpc)
 
@@ -48,10 +51,39 @@ export default function scanner (chainId: ChainId): BalanceScanner {
       }
     }
 
-    const result = await getTokensBalance(provider, address, contracts, {
-      contractAddress: providerConfig.scannerContract
-    })
-    const balances = Object.entries(result).filter(([_, balance]) => balance > 0)
+    const chunkedContracts = []
+    for (let i = 0; i < contracts.length; i += maxBalanceScanBatchSize) {
+      chunkedContracts.push(contracts.slice(i, i + maxBalanceScanBatchSize));
+    }
+
+    const concurrency =
+      contracts.length <= maxBalanceScanBatchSize ? 1 : chunkedContracts.length;
+
+    const start = Date.now()
+    const result = await mapLimit(
+      concurrency === 1 ? [contracts] : chunkedContracts,
+      concurrency,
+      async (chunk: string[]) => {
+        if (chunk.length === 0) {
+          return [];
+        }
+
+        return await getTokensBalance(provider, address, chunk, {
+          contractAddress: providerConfig.scannerContract,
+        });
+      }
+    );
+
+    const balanceMap = result
+      .flat()
+      .reduce((acc, e) => Object.assign(acc, e), {});
+
+    console.log(`getTokensBalance() address=${address} tokens=${contracts.length} concurrency=${concurrency} [${Date.now() - start}ms]`)
+
+    const balances = Object.entries(balanceMap).filter(
+      ([_, balance]) => balance > 0
+    )
+
     for (const [contract, balance] of balances) {
       yield {
         contractAddress: contract,

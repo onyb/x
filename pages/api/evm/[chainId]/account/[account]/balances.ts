@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { TokenInfo } from '@uniswap/token-lists'
 import makeBlockie from 'ethereum-blockies-base64'
 
 import Scanner from '~/core/evm/scanner/balances'
-import { ChainId } from '~/core/evm/types'
-import { getOrResolveAddress } from '~/core/evm/address'
-import { getCoingeckoId, getPricingMap } from '~/core/coingecko'
+import { ChainId, TokenInfo } from '~/core/evm/types'
+import { getOrResolveAddress, getAddressExplorerUrl } from "~/core/evm/address";
+import { getCoingeckoId } from "~/core/coingecko";
 import Amount from '~/core/amount'
 
 interface TypedNextApiRequest extends NextApiRequest {
@@ -27,6 +26,7 @@ type SuccessResponse = {
   resolvedAddress: string
   chainId: string
   blockie: string
+  explorer: string
   balances: Balance[]
 }
 
@@ -49,22 +49,17 @@ export default async function handler(
     const address = await getOrResolveAddress(account)
     const balances = await Scanner(chainId, address)
 
-    const coingeckoIds = balances
-      .map((each) => getCoingeckoId(each.token.address, chainId))
-      .filter((each) => Boolean(each))
-
-    const pricingMap = await getPricingMap(coingeckoIds)
-
     res.status(200).json({
       account,
       chainId,
       resolvedAddress: address,
+      explorer: getAddressExplorerUrl(address, chainId),
       blockie: makeBlockie(address.toLowerCase()),
       balances: balances.map((each) => ({
         token: each.token,
         amount: each.balance,
         amountUSD: new Amount(each.balance)
-          .times(pricingMap[getCoingeckoId(each.token.address, chainId)] || 0)
+          .times(each.token.price)
           .format(6),
       })),
     })

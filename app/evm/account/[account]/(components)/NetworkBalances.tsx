@@ -30,7 +30,7 @@ export default async function NetworkBalances (props: Props) {
       </div>
       <ul>
         {balances.map(({ token, balance }) => (
-          <li key={token.address}>
+          <li key={token.contractOrProgramAddress}>
             {balance} {token.symbol}
           </li>
         ))}

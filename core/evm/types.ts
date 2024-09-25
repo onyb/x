@@ -17,3 +17,24 @@ export type BalanceScanner = (
   },
   void
 >
+
+export type TokensList = {
+  [chainId: string]: {
+    [contractOrProgramAddress: string]: {
+      id: string;
+      decimals: number;
+    };
+  };
+};
+
+export type TokenInfo = {
+  id: string
+  chainId: string
+  contractOrProgramAddress: string
+  name: string
+  decimals: number
+  symbol: string
+  logo: string
+  explorerUrl: string
+  price: number
+};
