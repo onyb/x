@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 import { TokenInfo } from '@uniswap/token-lists'
+import makeBlockie from "ethereum-blockies-base64";
+
 
 import Scanner from '~/core/evm/scanner/balances'
 import { ChainId } from '~/core/evm/types'
@@ -22,6 +25,7 @@ type SuccessResponse = {
   account: string
   resolvedAddress: string
   chainId: string
+  blockie: string
   balances: Balance[]
 }
 
@@ -47,6 +51,7 @@ export default async function handler (
       account,
       chainId,
       resolvedAddress: address,
+      blockie: makeBlockie(address.toLowerCase()),
       balances: balances.map((each) => ({
         token: each.token,
         amount: each.balance,
