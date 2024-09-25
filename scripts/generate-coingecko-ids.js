@@ -1,6 +1,6 @@
-import fs from 'fs'
-import env from '@next/env'
-import { ethers } from 'ethers'
+const fs = require('fs')
+const env = require('@next/env')
+const { ethers } = require('ethers')
 
 const { loadEnvConfig } = env
 loadEnvConfig(process.cwd())
